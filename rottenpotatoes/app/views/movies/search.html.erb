@@ -1,9 +1,0 @@
-<h2>Movies with same director for #{@movie.title}</h2>
-<ul>
-  <% @similar_movies.each do |movie_name| %>
-    <li>
-      <%= movie_name %>
-    </li>
-  <% end %>
-</ul>
-<%= link_to 'Back', movies_path %>

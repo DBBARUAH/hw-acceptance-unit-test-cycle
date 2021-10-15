@@ -12,20 +12,7 @@ module NavigationHelpers
   #
   def path_to(page_name)
     case page_name
-    
-    when /^the home\s?page$/
-      movies_path
 
-    when /^the edit page for "(.*)"$/
-      movie_id = Movie.find_by(title: $1).id
-      edit_movie_path(movie_id)
-
-    when /^the details page for "(.+)"$/
-      movie = Movie.find_by(title: $1)
-      movie_path(movie)
-
-    when /^the Similar Movies page for "(.+)"/
-      search_similar_movies_path($1)
     when /^the (RottenPotatoes )?home\s?page$/ then '/movies'
 
     # Add more mappings here.
@@ -34,12 +21,21 @@ module NavigationHelpers
     #   when /^(.*)'s profile page$/i
     #     user_profile_path(User.find_by_login($1))
 
+    when /^the edit page for "(.*)"$/i
+      edit_movie_path(Movie.find_by(title: $1).id)
+
+    when /^the details page for "(.*)"$/
+      movie_path(Movie.find_by(title: $1))
+
+    when /^the Similar Movies page for "(.*)"/
+      similar_movie_path(Movie.find_by(title: $1).id)
+
     else
       begin
         page_name =~ /^the (.*) page$/
         path_components = $1.split(/\s+/)
         self.send(path_components.push('path').join('_').to_sym)
-      rescue NoMethodError, ArgumentError
+      rescue ArgumentError, NoMethodError
         raise "Can't find mapping from \"#{page_name}\" to a path.\n" +
           "Now, go and add a mapping in #{__FILE__}"
       end

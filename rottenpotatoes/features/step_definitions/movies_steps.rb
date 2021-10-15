@@ -1,4 +1,3 @@
-
 Given /the following movies exist/ do |movies_table|
   movies_table.hashes.each do |movie|
     Movie.create movie
@@ -24,8 +23,6 @@ Then /I should see all the movies/ do
   end
 end
 
-Then /^the director of "(.+)" should be "(.+)"/ do |movie_name, movie_director|
-  movie = Movie.find_by(title: movie_name)
-  visit movie_path(movie)
-  expect(page.body).to match(/Director:\s#{movie_director}/)
+Then(/^the director of "([^"]*)" should be "([^"]*)"$/) do |arg1, arg2|
+  expect(Movie.where(title: arg1).all[0].director).to eq arg2
 end

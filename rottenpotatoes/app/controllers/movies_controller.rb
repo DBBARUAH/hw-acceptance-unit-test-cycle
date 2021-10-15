@@ -1,8 +1,6 @@
 class MoviesController < ApplicationController
   
-  def movie_params
-    params.require(:movie).permit(:title, :rating, :description, :release_date, :director)
-  end
+  
   
   def show
     id = params[:id] # retrieve movie ID from URI route
@@ -11,27 +9,34 @@ class MoviesController < ApplicationController
   end
 
   def index
-    sort = params[:sort] || session[:sort]
-    case sort
-    when 'title'
-      ordering,@title_header = {:title => :asc}, 'hilite'
-    when 'release_date'
-      ordering,@date_header = {:release_date => :asc}, 'hilite'
-    end
-    @all_ratings = Movie.all_ratings
-    @selected_ratings = params[:ratings] || session[:ratings] || {}
+      @all_ratings = Movie.ratings 
+      @ratings = @all_ratings 
+      @ratings =  params[:ratings].keys if params[:ratings] 
+
+      @movies = Movie.where(rating: @ratings)
+      @sort=params[:sort]
+      if @sort
+        @movies = @movies.where(rating: @ratings).order(@sort)
+      else
+        @movies = Movie.where(rating: @ratings)
+      end
     
-    if @selected_ratings == {}
-      @selected_ratings = Hash[@all_ratings.map {|rating| [rating, rating]}]
+      session[:ratings] = params[:ratings] if params[:ratings] || params[:commit] == 'Refresh'
+      session[:sort] = params[:sort] if params[:sort]
+      if (!params[:sort] && !params[:ratings]) && (session[:sort] && session[:ratings])
+        flash.keep
+        return redirect_to movies_path(sort: session[:sort], ratings: session[:ratings])
+      elsif !params[:sort] && session[:sort]
+        flash.keep
+        return redirect_to movies_path(sort: session[:sort], ratings: params[:ratings])
+      elsif !params[:ratings] && session[:ratings]
+        flash.keep
+        return redirect_to movies_path(sort: params[:sort], ratings: session[:ratings])
+      end
+      
+      #@movies = Movie.where(rating: t_param.keys).order(@sort)
+      
     end
-    
-    if params[:sort] != session[:sort] or params[:ratings] != session[:ratings]
-      session[:sort] = sort
-      session[:ratings] = @selected_ratings
-      redirect_to :sort => sort, :ratings => @selected_ratings and return
-    end
-    @movies = Movie.where(rating: @selected_ratings.keys).order(ordering)
-  end
 
 
   def new
@@ -55,13 +60,14 @@ class MoviesController < ApplicationController
     redirect_to movie_path(@movie)
   end
   
-  def search
-    @similar_movies = Movie.similar_movies(params[:title])
-    if @similar_movies.nil?
-      flash[:notice]="'#{params[:title]}' has no director info"
-      redirect_to movies_path#, alert: "'#{params[:title]}' has no director info"
+  def similar
+    @movie_id=params[:id]
+    if not (Movie.find_by(id: @movie_id).director.nil? or Movie.find_by(id: @movie_id).director.empty?)
+      @sim_movies=Movie.similar_director_movies(Movie.find_by(id: @movie_id).director)
+    else
+      flash[:notice] = "'#{Movie.find_by(id: @movie_id).title}' has no director info"
+      redirect_to movies_path
     end
-    @movie = Movie.find_by(title: params[:title])
   end
 
   def destroy
@@ -74,5 +80,7 @@ class MoviesController < ApplicationController
   private
   # Making "internal" methods private is not required, but is a common practice.
   # This helps make clear which methods respond to requests, and which ones do not.
-
+  def movie_params
+    params.require(:movie).permit(:title, :rating, :description, :release_date, :director)
+  end
 end
