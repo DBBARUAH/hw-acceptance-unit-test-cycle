@@ -1,0 +1,93 @@
+
+MoviesController
+  Search movies by the same director
+[32m    should assign the list of movies with the same director if director exists[0m
+[32m    should display the similar.html.erb template if director exists[0m
+[32m    should go back to homepage if director does not exist[0m
+  get index function
+[31m    should get all the movies (FAILED - 1)[0m
+[32m    should render index.html.erb template[0m
+  get show function
+[32m    should get the movie to show[0m
+[32m    should render show.html.erb template[0m
+  get new function
+[32m    should display new.html.erb template[0m
+  post create function
+[32m    should create a new movie[0m
+[32m    should redirect to index page[0m
+  PUT #update
+[32m    updates an existing movie[0m
+[32m    redirects to the movie page[0m
+  DELETE #destroy
+[32m    destroys a movie[0m
+[32m    redirects to movies#index after destroy[0m
+  GET #edit
+[32m    should find the movie[0m
+[32m    should render the edit template[0m
+
+Movie
+  .find_similar_movies
+    director exists
+[32m      finds similar movies correctly[0m
+    director does not exist
+[32m      handles sad path[0m
+  .all_ratings
+[32m    returns all ratings[0m
+
+Movies
+  GET /movies
+[32m    works! (now write some real specs)[0m
+
+MoviesController
+  routing
+[32m    routes to #index[0m
+[32m    routes to #new[0m
+[32m    routes to #show[0m
+[32m    routes to #edit[0m
+[32m    routes to #create[0m
+[32m    routes to #update via PUT[0m
+[32m    routes to #update via PATCH[0m
+[32m    routes to #destroy[0m
+
+movies/edit
+[32m  renders the edit movie form[0m
+
+movies/index
+[31m  renders a list of movies (FAILED - 2)[0m
+
+movies/new
+[32m  renders new movie form[0m
+
+movies/show
+[32m  renders attributes in <p>[0m
+
+Failures:
+
+  1) MoviesController get index function should get all the movies
+     [31mFailure/Error: expect(movies).to eql(['Star Wars','Blade Runner','Alien', 'THX-1138'])[0m
+     [31m[0m
+     [31m  expected: ["Star Wars", "Blade Runner", "Alien", "THX-1138"][0m
+     [31m       got: [][0m
+     [31m[0m
+     [31m  (compared using eql?)[0m
+     [36m# ./spec/controllers/movies_controller_spec.rb:48:in `block (3 levels) in <top (required)>'[0m
+
+  2) movies/index renders a list of movies
+     [31mFailure/Error: <% @all_ratings.each do |rating| %>[0m
+     [31m[0m
+     [31mActionView::Template::Error:[0m
+     [31m  undefined method `each' for nil:NilClass[0m
+     [36m# ./app/views/movies/index.html.erb:8:in `block in _app_views_movies_index_html_erb___3115430958998788421_39571440'[0m
+     [36m# ./app/views/movies/index.html.erb:3:in `_app_views_movies_index_html_erb___3115430958998788421_39571440'[0m
+     [36m# ./spec/views/movies/index.html.erb_spec.rb:12:in `block (2 levels) in <top (required)>'[0m
+     [36m# ------------------[0m
+     [36m# --- Caused by: ---[0m
+     [36m# NoMethodError:[0m
+     [36m#   undefined method `each' for nil:NilClass[0m
+     [36m#   ./app/views/movies/index.html.erb:8:in `block in _app_views_movies_index_html_erb___3115430958998788421_39571440'[0m
+
+Finished in 0.43414 seconds (files took 1.59 seconds to load)
+[31m32 examples, 2 failures
+
+Coverage report generated for Cucumber Features, RSpec to /home/ec2-user/environment/hw-acceptance-unit-test-cycle/rottenpotatoes/coverage. 61 / 63 LOC (96.83%) covered.
+
