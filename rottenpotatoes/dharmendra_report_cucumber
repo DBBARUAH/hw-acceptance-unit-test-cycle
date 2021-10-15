@@ -1,0 +1,163 @@
+Using the default profile...
+Feature: display list of movies filtered by MPAA rating
+  As a concerned parent
+  So that I can quickly browse movies appropriate for my family
+  I want to see movies matching only certain MPAA ratings
+
+  Background: movies have been added to database[90m # features/filter_movie_list.feature:7[0m
+    [32mGiven the following movies exist:[90m            # features/step_definitions/movies_steps.rb:1[0m[0m
+      | [36mtitle                  [0m[0m |[0m [36mrating[0m[0m |[0m [36mrelease_date[0m[0m |[0m
+      | [36mAladdin                [0m[0m |[0m [36mG     [0m[0m |[0m [36m25-Nov-1992 [0m[0m |[0m
+      | [36mThe Terminator         [0m[0m |[0m [36mR     [0m[0m |[0m [36m26-Oct-1984 [0m[0m |[0m
+      | [36mWhen Harry Met Sally   [0m[0m |[0m [36mR     [0m[0m |[0m [36m21-Jul-1989 [0m[0m |[0m
+      | [36mThe Help               [0m[0m |[0m [36mPG-13 [0m[0m |[0m [36m10-Aug-2011 [0m[0m |[0m
+      | [36mChocolat               [0m[0m |[0m [36mPG-13 [0m[0m |[0m [36m5-Jan-2001  [0m[0m |[0m
+      | [36mAmelie                 [0m[0m |[0m [36mR     [0m[0m |[0m [36m25-Apr-2001 [0m[0m |[0m
+      | [36m2001: A Space Odyssey  [0m[0m |[0m [36mG     [0m[0m |[0m [36m6-Apr-1968  [0m[0m |[0m
+      | [36mThe Incredibles        [0m[0m |[0m [36mPG    [0m[0m |[0m [36m5-Nov-2004  [0m[0m |[0m
+      | [36mRaiders of the Lost Ark[0m[0m |[0m [36mPG    [0m[0m |[0m [36m12-Jun-1981 [0m[0m |[0m
+      | [36mChicken Run            [0m[0m |[0m [36mG     [0m[0m |[0m [36m21-Jun-2000 [0m[0m |[0m
+    [31mAnd I am on [31m[1mthe RottenPotatoes home page[0m[0m[31m[90m     # features/step_definitions/web_steps.rb:44[0m[0m
+[31m      undefined method `include?' for nil:NilClass (ActionView::Template::Error)[0m
+[31m      ./app/views/movies/index.html.erb:10:in `block (2 levels) in _app_views_movies_index_html_erb___711715641471372587_48916360'[0m
+[31m      ./app/views/movies/index.html.erb:8:in `each'[0m
+[31m      ./app/views/movies/index.html.erb:8:in `block in _app_views_movies_index_html_erb___711715641471372587_48916360'[0m
+[31m      ./app/views/movies/index.html.erb:3:in `_app_views_movies_index_html_erb___711715641471372587_48916360'[0m
+[31m      ./features/step_definitions/web_steps.rb:45:in `/^(?:|I )am on (.+)$/'[0m
+[31m      features/filter_movie_list.feature:22:in `And I am on the RottenPotatoes home page'[0m
+
+  Scenario: restrict to movies with 'PG' or 'R' ratings[90m # features/filter_movie_list.feature:24[0m
+      # enter step(s) to check the 'PG' and 'R' checkboxes
+      # enter step(s) to uncheck all other checkboxes
+      # enter step to "submit" the search form on the homepage
+      # enter step(s) to ensure that PG and R movies are visible
+      # enter step(s) to ensure that other movies are not visible
+    [36mWhen I check the following ratings: [36m[1mPG, R[0m[0m[36m[90m           # features/step_definitions/movies_steps.rb:13[0m[0m
+    [36mAnd I [36m[1mun[0m[0m[36mcheck the following ratings: [36m[1mG, PG-13[0m[0m[36m[90m       # features/step_definitions/movies_steps.rb:13[0m[0m
+    [36mAnd I press "[36m[1mratings_submit[0m[0m[36m"[90m                        # features/step_definitions/web_steps.rb:52[0m[0m
+    [36mThen I should see "[36m[1mThe Incredibles[0m[0m[36m"[90m                 # features/step_definitions/web_steps.rb:105[0m[0m
+    [36mAnd I should see "[36m[1mThe Terminator[0m[0m[36m"[90m                   # features/step_definitions/web_steps.rb:105[0m[0m
+    [36mAnd I should not see "[36m[1mAlladin[0m[0m[36m"[90m                      # features/step_definitions/web_steps.rb:123[0m[0m
+    [36mAnd I should not see "[36m[1mThe Help[0m[0m[36m"[90m                     # features/step_definitions/web_steps.rb:123[0m[0m
+
+  Scenario: all ratings selected[90m                        # features/filter_movie_list.feature:38[0m
+    [36mWhen I check the following ratings: [36m[1mPG, R, G, PG-13[0m[0m[36m[90m # features/step_definitions/movies_steps.rb:13[0m[0m
+    [36mAnd I press "[36m[1mratings_submit[0m[0m[36m"[90m                        # features/step_definitions/web_steps.rb:52[0m[0m
+    [36mThen I should see all the movies[90m                    # features/step_definitions/movies_steps.rb:19[0m[0m
+
+Feature: search for movies by director
+  As a movie buff
+  So that I can find movies with my favorite director
+  I want to include and search on director information in movies I enter
+
+  Background: movies in database[90m      # features/movies_by_director.feature:7[0m
+    [32mGiven the following movies exist:[90m # features/step_definitions/movies_steps.rb:1[0m[0m
+      | [36mtitle       [0m[0m |[0m [36mrating[0m[0m |[0m [36mdirector    [0m[0m |[0m [36mrelease_date[0m[0m |[0m
+      | [36mStar Wars   [0m[0m |[0m [36mPG    [0m[0m |[0m [36mGeorge Lucas[0m[0m |[0m [36m1977-05-25  [0m[0m |[0m
+      | [36mBlade Runner[0m[0m |[0m [36mPG    [0m[0m |[0m [36mRidley Scott[0m[0m |[0m [36m1982-06-25  [0m[0m |[0m
+      | [36mAlien       [0m[0m |[0m [36mR     [0m[0m |[0m [36m            [0m[0m |[0m [36m1979-05-25  [0m[0m |[0m
+      | [36mTHX-1138    [0m[0m |[0m [36mR     [0m[0m |[0m [36mGeorge Lucas[0m[0m |[0m [36m1971-03-11  [0m[0m |[0m
+
+  Scenario: add director to existing movie[90m                # features/movies_by_director.feature:16[0m
+    [32mWhen I go to [32m[1mthe edit page for "Alien"[0m[0m[32m[90m                # features/step_definitions/web_steps.rb:48[0m[0m
+    [32mAnd I fill in "[32m[1mDirector[0m[0m[32m" with "[32m[1mRidley Scott[0m[0m[32m"[90m          # features/step_definitions/web_steps.rb:60[0m[0m
+    [32mAnd I press "[32m[1mUpdate Movie Info[0m[0m[32m"[90m                       # features/step_definitions/web_steps.rb:52[0m[0m
+    [32mThen the director of "[32m[1mAlien[0m[0m[32m" should be "[32m[1mRidley Scott[0m[0m[32m"[90m # features/step_definitions/movies_steps.rb:26[0m[0m
+
+  Scenario: find movie with same director[90m                       # features/movies_by_director.feature:22[0m
+    [32mGiven I am on [32m[1mthe details page for "Star Wars"[0m[0m[32m[90m              # features/step_definitions/web_steps.rb:44[0m[0m
+    [32mWhen I follow "[32m[1mFind Movies With Same Director[0m[0m[32m"[90m              # features/step_definitions/web_steps.rb:56[0m[0m
+    [32mThen I should be on [32m[1mthe Similar Movies page for "Star Wars"[0m[0m[32m[90m # features/step_definitions/web_steps.rb:230[0m[0m
+    [32mAnd I should see "[32m[1mTHX-1138[0m[0m[32m"[90m                                 # features/step_definitions/web_steps.rb:105[0m[0m
+    [32mBut I should not see "[32m[1mBlade Runner[0m[0m[32m"[90m                         # features/step_definitions/web_steps.rb:123[0m[0m
+
+  Scenario: can't find similar movies if we don't know director (sad path)[90m # features/movies_by_director.feature:29[0m
+    [32mGiven I am on [32m[1mthe details page for "Alien"[0m[0m[32m[90m                             # features/step_definitions/web_steps.rb:44[0m[0m
+    [32mThen I should not see "[32m[1mRidley Scott[0m[0m[32m"[90m                                   # features/step_definitions/web_steps.rb:123[0m[0m
+    [31mWhen I follow "[31m[1mFind Movies With Same Director[0m[0m[31m"[90m                         # features/step_definitions/web_steps.rb:56[0m[0m
+[31m      undefined method `include?' for nil:NilClass (ActionView::Template::Error)[0m
+[31m      ./app/views/movies/index.html.erb:10:in `block (2 levels) in _app_views_movies_index_html_erb___711715641471372587_48916360'[0m
+[31m      ./app/views/movies/index.html.erb:8:in `each'[0m
+[31m      ./app/views/movies/index.html.erb:8:in `block in _app_views_movies_index_html_erb___711715641471372587_48916360'[0m
+[31m      ./app/views/movies/index.html.erb:3:in `_app_views_movies_index_html_erb___711715641471372587_48916360'[0m
+[31m      ./features/step_definitions/web_steps.rb:57:in `/^(?:|I )follow "([^"]*)"$/'[0m
+[31m      features/movies_by_director.feature:32:in `When I follow "Find Movies With Same Director"'[0m
+    [36mThen I should be on [36m[1mthe home page[0m[0m[36m[90m                                      # features/step_definitions/web_steps.rb:230[0m[0m
+    [36mAnd I should see "[36m[1m'Alien' has no director info[0m[0m[36m"[90m                        # features/step_definitions/web_steps.rb:105[0m[0m
+
+  Scenario: add movie[90m                                            # features/movies_by_director.feature:36[0m
+    [31mGiven I am on [31m[1mthe RottenPotatoes home page[0m[0m[31m[90m                   # features/step_definitions/web_steps.rb:44[0m[0m
+[31m      undefined method `include?' for nil:NilClass (ActionView::Template::Error)[0m
+[31m      ./app/views/movies/index.html.erb:10:in `block (2 levels) in _app_views_movies_index_html_erb___711715641471372587_48916360'[0m
+[31m      ./app/views/movies/index.html.erb:8:in `each'[0m
+[31m      ./app/views/movies/index.html.erb:8:in `block in _app_views_movies_index_html_erb___711715641471372587_48916360'[0m
+[31m      ./app/views/movies/index.html.erb:3:in `_app_views_movies_index_html_erb___711715641471372587_48916360'[0m
+[31m      ./features/step_definitions/web_steps.rb:45:in `/^(?:|I )am on (.+)$/'[0m
+[31m      features/movies_by_director.feature:37:in `Given I am on the RottenPotatoes home page'[0m
+    [36mWhen I follow "[36m[1mAdd new movie[0m[0m[36m"[90m                                # features/step_definitions/web_steps.rb:56[0m[0m
+    [36mAnd I fill in "[36m[1mTitle[0m[0m[36m" with "[36m[1mThe Infiltrator[0m[0m[36m"[90m                 # features/step_definitions/web_steps.rb:60[0m[0m
+    [36mAnd I select "[36m[1mR[0m[0m[36m" from "[36m[1mRating[0m[0m[36m"[90m                               # features/step_definitions/web_steps.rb:85[0m[0m
+    [36mAnd I press "[36m[1mSave Changes[0m[0m[36m"[90m                                   # features/step_definitions/web_steps.rb:52[0m[0m
+    [36mThen I should be on [36m[1mthe RottenPotatoes home page[0m[0m[36m[90m             # features/step_definitions/web_steps.rb:230[0m[0m
+    [36mAnd I should see "[36m[1mThe Infiltrator was successfully created.[0m[0m[36m"[90m # features/step_definitions/web_steps.rb:105[0m[0m
+
+  Scenario: delete movie[90m                             # features/movies_by_director.feature:45[0m
+    [32mGiven I am on [32m[1mthe details page for "Alien"[0m[0m[32m[90m       # features/step_definitions/web_steps.rb:44[0m[0m
+    [31mWhen I press "[31m[1mDelete[0m[0m[31m"[90m                            # features/step_definitions/web_steps.rb:52[0m[0m
+[31m      undefined method `include?' for nil:NilClass (ActionView::Template::Error)[0m
+[31m      ./app/views/movies/index.html.erb:10:in `block (2 levels) in _app_views_movies_index_html_erb___711715641471372587_48916360'[0m
+[31m      ./app/views/movies/index.html.erb:8:in `each'[0m
+[31m      ./app/views/movies/index.html.erb:8:in `block in _app_views_movies_index_html_erb___711715641471372587_48916360'[0m
+[31m      ./app/views/movies/index.html.erb:3:in `_app_views_movies_index_html_erb___711715641471372587_48916360'[0m
+[31m      ./features/step_definitions/web_steps.rb:53:in `/^(?:|I )press "([^"]*)"$/'[0m
+[31m      features/movies_by_director.feature:47:in `When I press "Delete"'[0m
+    [36mThen I should be on [36m[1mthe RottenPotatoes home page[0m[0m[36m[90m # features/step_definitions/web_steps.rb:230[0m[0m
+    [36mAnd I should see "[36m[1mMovie 'Alien' deleted[0m[0m[36m"[90m         # features/step_definitions/web_steps.rb:105[0m[0m
+
+Feature: display list of movies sorted by different criteria
+  As an avid moviegoer
+  So that I can quickly browse movies based on my preferences
+  I want to see movies sorted by title or release date
+
+  Background: movies have been added to database[90m # features/sort_movie_list.feature:7[0m
+    [32mGiven the following movies exist:[90m            # features/step_definitions/movies_steps.rb:1[0m[0m
+      | [36mtitle                  [0m[0m |[0m [36mrating[0m[0m |[0m [36mrelease_date[0m[0m |[0m
+      | [36mAladdin                [0m[0m |[0m [36mG     [0m[0m |[0m [36m25-Nov-1992 [0m[0m |[0m
+      | [36mThe Terminator         [0m[0m |[0m [36mR     [0m[0m |[0m [36m26-Oct-1984 [0m[0m |[0m
+      | [36mWhen Harry Met Sally   [0m[0m |[0m [36mR     [0m[0m |[0m [36m21-Jul-1989 [0m[0m |[0m
+      | [36mThe Help               [0m[0m |[0m [36mPG-13 [0m[0m |[0m [36m10-Aug-2011 [0m[0m |[0m
+      | [36mChocolat               [0m[0m |[0m [36mPG-13 [0m[0m |[0m [36m5-Jan-2001  [0m[0m |[0m
+      | [36mAmelie                 [0m[0m |[0m [36mR     [0m[0m |[0m [36m25-Apr-2001 [0m[0m |[0m
+      | [36m2001: A Space Odyssey  [0m[0m |[0m [36mG     [0m[0m |[0m [36m6-Apr-1968  [0m[0m |[0m
+      | [36mThe Incredibles        [0m[0m |[0m [36mPG    [0m[0m |[0m [36m5-Nov-2004  [0m[0m |[0m
+      | [36mRaiders of the Lost Ark[0m[0m |[0m [36mPG    [0m[0m |[0m [36m12-Jun-1981 [0m[0m |[0m
+      | [36mChicken Run            [0m[0m |[0m [36mG     [0m[0m |[0m [36m21-Jun-2000 [0m[0m |[0m
+    [31mAnd I am on [31m[1mthe RottenPotatoes home page[0m[0m[31m[90m     # features/step_definitions/web_steps.rb:44[0m[0m
+[31m      undefined method `include?' for nil:NilClass (ActionView::Template::Error)[0m
+[31m      ./app/views/movies/index.html.erb:10:in `block (2 levels) in _app_views_movies_index_html_erb___711715641471372587_48916360'[0m
+[31m      ./app/views/movies/index.html.erb:8:in `each'[0m
+[31m      ./app/views/movies/index.html.erb:8:in `block in _app_views_movies_index_html_erb___711715641471372587_48916360'[0m
+[31m      ./app/views/movies/index.html.erb:3:in `_app_views_movies_index_html_erb___711715641471372587_48916360'[0m
+[31m      ./features/step_definitions/web_steps.rb:45:in `/^(?:|I )am on (.+)$/'[0m
+[31m      features/sort_movie_list.feature:22:in `And I am on the RottenPotatoes home page'[0m
+
+  Scenario: sort movies alphabetically[90m          # features/sort_movie_list.feature:24[0m
+    [36mWhen I follow "[36m[1mMovie Title[0m[0m[36m"[90m                 # features/step_definitions/web_steps.rb:56[0m[0m
+    [36mThen I should see "[36m[1mAladdin[0m[0m[36m" before "[36m[1mAmelie[0m[0m[36m"[90m # features/step_definitions/movies_steps.rb:7[0m[0m
+
+  Scenario: sort movies in increasing order of release date[90m # features/sort_movie_list.feature:28[0m
+    [36mWhen I follow "[36m[1mRelease Date[0m[0m[36m"[90m                            # features/step_definitions/web_steps.rb:56[0m[0m
+    [36mThen I should see "[36m[1mAladdin[0m[0m[36m" before "[36m[1mAmelie[0m[0m[36m"[90m             # features/step_definitions/movies_steps.rb:7[0m[0m
+
+[31mFailing Scenarios:[0m
+[31mcucumber features/filter_movie_list.feature:24[0m[90m # Scenario: restrict to movies with 'PG' or 'R' ratings[0m
+[31mcucumber features/filter_movie_list.feature:38[0m[90m # Scenario: all ratings selected[0m
+[31mcucumber features/movies_by_director.feature:29[0m[90m # Scenario: can't find similar movies if we don't know director (sad path)[0m
+[31mcucumber features/movies_by_director.feature:36[0m[90m # Scenario: add movie[0m
+[31mcucumber features/movies_by_director.feature:45[0m[90m # Scenario: delete movie[0m
+[31mcucumber features/sort_movie_list.feature:24[0m[90m # Scenario: sort movies alphabetically[0m
+[31mcucumber features/sort_movie_list.feature:28[0m[90m # Scenario: sort movies in increasing order of release date[0m
+
+9 scenarios ([31m7 failed[0m, [32m2 passed[0m)
+52 steps ([31m7 failed[0m, [36m24 skipped[0m, [32m21 passed[0m)
+0m0.572s
